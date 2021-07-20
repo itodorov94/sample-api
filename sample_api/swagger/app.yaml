@@ -1,0 +1,72 @@
+swagger: "2.0"
+info:
+  description: This is an API providing option to search and download files
+  version: "0.1"
+  title: Application REST API
+basePath: "/api"
+tags:
+  - name: application
+security:
+  # enable authentication and require the "uid" scope for this endpoint
+  - oauth2: ['uid']
+paths:
+  /search:
+    get:
+      parameters:
+        - name: appName
+          in: query
+          type: string
+          enum: [via_desktop, via_mobile, via_shift_planner, via_service]
+          description: The application name
+        - name: os
+          in: query
+          type: string
+          enum: [macos, linux, windows]
+          description: The name of the os
+        - name: version
+          in: query
+          type: integer
+          minimum: 1
+          maximum: 9
+          description: version of the application
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Limit how many results to show
+      operationId: api.search
+      description: "Search applications"
+      responses:
+        200:
+          description: "Successful search of application"
+        400:
+          description: "Invalid parameter supplied"
+
+  /download:
+    get:
+      parameters:
+        - name: file_identifier
+          in: query
+          type: string
+          description: File identifier
+          required: true
+      operationId: api.download
+      description: "Download application by file_identifier"
+      responses:
+        200:
+          description: "Successful start of download"
+        400:
+          description: "Invalid parameter supplied"
+
+securityDefinitions:
+  oauth2:
+    type: oauth2
+    flow: implicit
+    authorizationUrl: http://localhost:7979/tokeninfo
+    # the token info URL is hardcoded for mock_tokeninfo.py script
+    x-tokenInfoUrl: http://localhost:7979/tokeninfo
+    scopes:
+      token: Token of the user accessing the service.
+
+
+        

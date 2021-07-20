@@ -1,0 +1,4 @@
+flask
+connexion[swagger-ui]
+flask_testing
+jsonschema==3.2.0
